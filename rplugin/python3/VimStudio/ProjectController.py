@@ -66,4 +66,4 @@ class ProjectController:
         
         if not os.path.exists(d + "/.gradle/init.d/VimStudio.gradle"):
             with open(d + "/.gradle/init.d/VimStudio.gradle", "a+") as f:
-                write("allprojects { apply from: 'https://raw.githubusercontent.com/meonlol/vim-grand/refactor/grand.gradle'}")
+                write("allprojects { apply from: 'https://raw.githubusercontent.com/DonnieWest/VimStudio/master/VimStudio.gradle'}")
