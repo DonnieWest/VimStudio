@@ -45,7 +45,7 @@ class ProjectController:
         return self.fileExistsInCwd(self.GRADLE_BUILD_FILE, 1)
 
     def isAndroidProject(self):
-        return self.fileExistsInCwd(self.ANDROID_MANIFEST_FILE, 4)
+        return self.fileExistsInCwd(self.ANDROID_MANIFEST_FILE, 10)
 
     def isVimStudioReady(self):
         return self.fileExistsInCwd(self.GRADLE_WRITE_FILE, 1)
