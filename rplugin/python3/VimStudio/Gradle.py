@@ -6,7 +6,7 @@ class Gradle(object):
         self.vim = vim
 
     def setGradleCompiler(self):
-        self.vim.command("let g:gradleBin = '" + self.gradleCommand() + "' | compiler gradle")
+        self.vim.command("let g:gradleBin = '" + self.gradleCommand() + "' | compiler! gradle")
 
     def runGradleCommand(self, command, async=False):
         gradle = self.gradleCommand()
