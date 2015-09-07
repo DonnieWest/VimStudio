@@ -38,10 +38,13 @@ def addProjectConfigsToList(proj) {
     }
 }
 def addProjectSourceSetsToList(proj) {
-    for (srcSet in proj.sourceSets) {
-        for (dir in srcSet.java.srcDirs) {
-            classpathFiles += dir.absolutePath
-        }
+    if (proj.hasProperty("sourceSets")) {
+    
+      for (srcSet in proj.sourceSets) {
+          for (dir in srcSet.java.srcDirs) {
+              classpathFiles += dir.absolutePath
+          }
+      }
     }
 }
 
@@ -52,4 +55,9 @@ def generateFileContentsFromList() {
 
 def generateClassPathFile() {
     new File(rootProject.projectDir.absolutePath + "/" + OUTPUT_FILE).text = finalFileContents
+     
+    for (proj in getChildProjects()) {
+      
+      new File(proj.value.projectDir.absolutePath + "/" + OUTPUT_FILE).text = finalFileContents
+    }
 }
