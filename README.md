@@ -19,9 +19,6 @@ Requirements
 
 ### Recommended
 
-- [Tim Pope's Dispatch](https://github.com/tpope/vim-dispatch) vim-grand will
-  run the appropriate commands through it, so vim doesn't get blocked. Highly
-  recommended.
 - [YouCompleteMe](https://github.com/Valloric/YouCompleteMe) for managing
   additional autocompletion features.
 
@@ -56,7 +53,7 @@ Features
 
 *On first launch, VimStudio will automatically setup Neovim and Gradle to behave most like an IDE. It will install a global Gradle plugin that it will run at start or when the build.gradle file is modified. This plugin provides the classpaths for autocompletion via Javacomplete2.
 
-*:VimStudioSetup* Sets up all the project paths for javacomplete and syntastic.
+*:SetupVimStudio* Sets up all the project paths for javacomplete and syntastic.
 When used in combination with the `grand.gradle` script, all paths defined in
 your build.gradle will also be used for autocompletion and syntax checking.  
 
@@ -65,11 +62,6 @@ This way you can jump to classes (even Androids source files) simply by
 pressing `CTRL-]`.
 
 *VimStudio sets gradle to be the compiler
-
-Additional setup for a pleasant experience
---------------------------------------------------------------------------------
-
-These tweaks and mappings for in you .vimrc will make you happy.
 
 Contributing
 --------------------------------------------------------------------------------
