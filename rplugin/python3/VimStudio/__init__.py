@@ -39,5 +39,3 @@ class VimStudio(object):
     def refreshPaths(self):
         self.Configurator.generatePaths()
         self.setupVimStudio()
-
-    

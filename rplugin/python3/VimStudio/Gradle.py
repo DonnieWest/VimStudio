@@ -28,4 +28,4 @@ class Gradle(object):
             return "gradle"
     
     def lint(self):
-        self.vim.command(self.gradleCommand() + " lint")
+        self.vim.command("make lint")
