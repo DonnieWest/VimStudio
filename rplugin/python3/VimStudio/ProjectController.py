@@ -41,6 +41,12 @@ class ProjectController:
             someFiles.extend([f for f in allFiles if fnmatch.fnmatch(os.path.basename(f), fnMask )])
         return someFiles
 
+    def findFile(self, directory, name):
+        matches = []
+        for root, dirnames, filenames in os.walk(directory):
+            for filename in fnmatch.filter(filenames, name):
+                matches.append(os.path.join(root, filename))
+        return matches
     def isGradleProject(self):
         return self.fileExistsInCwd(self.GRADLE_BUILD_FILE, 1)
 
@@ -53,6 +59,11 @@ class ProjectController:
     def isGradleSetup(self):
         home_directory = os.path.expanduser("~")
         return self.fileExistsInDir("VimStudio.gradle", home_directory + "/.gradle/init.d/", 1)
+
+    def findAndroidManifest(self):
+        cwd = os.getcwd()
+        manifest = self.ANDROID_MANIFEST_FILE
+        return self.findFile(cwd, manifest).pop()
 
     def setupEnvironment(self):
         d = os.path.expanduser("~")
