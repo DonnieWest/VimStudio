@@ -28,4 +28,4 @@ class Gradle(object):
             return "gradle"
     
     def lint(self):
-        self.vim.command("make lint")
+        self.vim.command("cexpr system('" + self.gradleCommand() + " lint')")
