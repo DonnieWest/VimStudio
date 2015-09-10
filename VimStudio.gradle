@@ -61,3 +61,19 @@ def generateClassPathFile() {
       new File(proj.value.projectDir.absolutePath + "/" + OUTPUT_FILE).text = finalFileContents
     }
 }
+
+allprojects{
+
+  afterEvaluate {
+        if (getPlugins().hasPlugin('android') ||
+            getPlugins().hasPlugin('android-library')) {
+
+            configure(android.lintOptions) {
+              textReport true
+              textOutput "stderr"
+              abortOnError false
+            }
+        }
+
+    }
+}
