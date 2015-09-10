@@ -11,6 +11,7 @@ class VimStudio(object):
         self.Configurator = Configurator(vim)
         self.ProjectController = ProjectController()
         self.Gradle = Gradle(self.vim)
+        
 
     @neovim.command("VimStudioCtags")
     def ctags(self):
@@ -21,6 +22,10 @@ class VimStudio(object):
         if self.ProjectController.isGradleProject():
             self.Configurator.genPathsAndSetup()
             self.Gradle.setGradleCompiler()
+    
+    @neovim.command("VimStudioLint")
+    def lint(self):
+        self.Gradle.lint()
 
     @neovim.autocmd("BufWritePost", pattern="*.java")
     def autoCtags(self):
@@ -34,3 +39,5 @@ class VimStudio(object):
     def refreshPaths(self):
         self.Configurator.generatePaths()
         self.setupVimStudio()
+
+    

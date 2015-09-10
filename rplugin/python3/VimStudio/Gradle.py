@@ -26,3 +26,6 @@ class Gradle(object):
             return "./gradlew"
         else:
             return "gradle"
+    
+    def lint(self):
+        self.vim.command(self.gradleCommand() + " lint")
