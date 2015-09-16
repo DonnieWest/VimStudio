@@ -39,3 +39,14 @@ class VimStudio(object):
     def refreshPaths(self):
         self.Configurator.generatePaths()
         self.setupVimStudio()
+
+    @neovim.autocmd("BufEnter", pattern="*.xml")
+    def layoutCompletion(self):
+        if self.ProjectController.isAndroidProject():
+            self.vim.command("XMLns android")
+
+
+    @neovim.autocmd("BufEnter", pattern="AndroidManifest.xml")
+    def manifestCompletion(self):
+        if self.ProjectController.isAndroidProject():
+            self.vim.command("XMLns manifest")
