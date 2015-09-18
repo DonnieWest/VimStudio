@@ -10,11 +10,11 @@ class Configurator(object):
     def setupJavacomplete(self):
         classpath = ':'.join(PathsFinder().getAllClassPaths())
         
-        self.vim.command("call javacomplete#ClearCache()")
-        self.vim.command("call javacomplete#TerminateServer()")
+        self.vim.command("JCcacheClear")
+        self.vim.command("JCserverTerminate")
         self.vim.command("sleep 400m") #Allow for the server to terminate
         self.vim.command("let g:JavaComplete_LibsPath = '" + classpath + "'")
-        self.vim.command("call javacomplete#StartServer()")
+        self.vim.command("JCserverStart")
     def setupSyntastic(self):
         classpath = []
         classpath.extend(PathsFinder().getAllClassPaths())
