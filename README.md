@@ -49,9 +49,6 @@ Features
 --------------------------------------------------------------------------------
 
 ### Warning! VimStudio currently only works on Unix systems
-### Warning! VimStudio also currently modifies files in your home directory and adds plugins to Gradle. This will be configurable in the future
-
-*On first launch, VimStudio will automatically setup Neovim and Gradle to behave most like an IDE. It will install a global Gradle plugin that it will run at start or when the build.gradle file is modified. This plugin provides the classpaths for autocompletion via Javacomplete2.
 
 *:SetupVimStudio* Sets up all the project paths for javacomplete and syntastic.
 When used in combination with the `grand.gradle` script, all paths defined in
