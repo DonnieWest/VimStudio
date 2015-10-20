@@ -56,25 +56,7 @@ class ProjectController:
     def isVimStudioReady(self):
         return self.fileExistsInCwd(self.GRADLE_WRITE_FILE, 1)
 
-    def isGradleSetup(self):
-        home_directory = os.path.expanduser("~")
-        return self.fileExistsInDir("VimStudio.gradle", home_directory + "/.gradle/init.d/", 1)
-
     def findAndroidManifest(self):
         cwd = os.getcwd()
         manifest = self.ANDROID_MANIFEST_FILE
         return self.findFile(cwd, manifest).pop()
-
-    def setupEnvironment(self):
-        d = os.path.expanduser("~")
-
-
-        if not os.path.exists(d + "/.gradle/init.d/VimStudio.gradle"):
-            if not os.path.exists(d + "/.gradle/init.d"):
-                if not os.path.exists(d + "/.gradle"):
-                    os.makedirs(d + "/.gradle")
-                os.makedirs(d + "/.gradle/init.d")
-        
-        if not os.path.exists(d + "/.gradle/init.d/VimStudio.gradle"):
-            with open(d + "/.gradle/init.d/VimStudio.gradle", "a+") as f:
-                write("allprojects { apply from: 'https://raw.githubusercontent.com/DonnieWest/VimStudio/master/VimStudio.gradle'}")

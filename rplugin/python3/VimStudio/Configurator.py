@@ -27,18 +27,13 @@ class Configurator(object):
         if ProjectController().isGradleProject():
             Gradle(self.vim).outputPaths(async)
 
-    def setupVimStudio(self):
-        Project = ProjectController()
-        if Project.isGradleProject() and not Project.isGradleSetup():
-            Project.setupEnvironment()
-
     def genPathsIfNone(self):
         if not ProjectController().isVimStudioReady():
             self.generatePaths()
 
     def genPathsAndSetup(self):
         if ProjectController().isGradleProject():
-            self.setupVimStudio()
+            # self.setupVimStudio()
             self.genPathsIfNone()
             self.setupJavacomplete()
             self.setupSyntastic()

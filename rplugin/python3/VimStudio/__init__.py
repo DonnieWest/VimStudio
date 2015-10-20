@@ -11,7 +11,6 @@ class VimStudio(object):
         self.Configurator = Configurator(vim)
         self.ProjectController = ProjectController()
         self.Gradle = Gradle(self.vim)
-        
 
     @neovim.command("VimStudioCtags")
     def ctags(self):
@@ -44,7 +43,6 @@ class VimStudio(object):
     def layoutCompletion(self):
         if self.ProjectController.isAndroidProject():
             self.vim.command("XMLns android")
-
 
     @neovim.autocmd("BufEnter", pattern="AndroidManifest.xml")
     def manifestCompletion(self):
