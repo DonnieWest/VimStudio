@@ -11,16 +11,17 @@ class VimStudio(object):
         self.Configurator = Configurator(vim)
         self.ProjectController = ProjectController()
         self.Gradle = Gradle(self.vim)
+        self.Ctags = Ctags(self.vim)
 
     @neovim.command("VimStudioCtags")
     def ctags(self):
-        Ctags().generateCtags
+        self.Ctags.generateCtags()
 
     @neovim.command("SetupVimStudio")
     def setupVimStudio(self):
         if self.ProjectController.isGradleProject():
-            self.Configurator.genPathsAndSetup()
             self.Gradle.setGradleCompiler()
+        self.Configurator.setupSyntastic()
     
     @neovim.command("VimStudioLint")
     def lint(self):
@@ -30,14 +31,15 @@ class VimStudio(object):
     def autoCtags(self):
         self.ctags()
 
-    @neovim.autocmd("VimEnter")
+    @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
         self.setupVimStudio()
 
-    @neovim.autocmd("BufWritePost", pattern="build.gradle")
-    def refreshPaths(self):
-        self.Configurator.generatePaths()
-        self.setupVimStudio()
+    #TODO: Force refresh of classpaths when build.gradle is written
+    # @neovim.autocmd("BufWritePost", pattern="build.gradle")
+    # def refreshPaths(self):
+    #     self.Configurator.generatePaths()
+    #     self.setupVimStudio()
 
     @neovim.autocmd("BufEnter", pattern="*.xml")
     def layoutCompletion(self):

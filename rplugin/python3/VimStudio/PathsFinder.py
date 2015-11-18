@@ -4,7 +4,8 @@ import sys
 from .ProjectController import ProjectController
 
 class PathsFinder:
-    def __init__(self):
+    def __init__(self, vim):
+        self.vim = vim
         sys.path.append(os.getcwd())
         self.ProjectController = ProjectController()
 
@@ -16,24 +17,14 @@ class PathsFinder:
 
         staticPaths.append('./src/main/java')
         staticPaths.append('./build/intermediates/classes/debug')
-
+        sources = self.vim.eval("g:JavaComplete_SourcesPath")[1:].replace("//", "/").split(":")
+        for each in sources:
+            staticPaths.append(each + "/main/java")
         return staticPaths
 
-
-    def getDynamicPaths(self):
-        dynamicPaths = []
-
-        if self.ProjectController.isAndroidProject():
-            dynamicPaths.append(self.getAndroidSdkJar())
-            dynamicPaths.extend(self.getExplodedAarClasses())
-        return dynamicPaths
-
     def getAllClassPaths(self):
-        classPathsAndJars = []
-
-        # classPathsAndJars.extend(self.getAllSourcePaths())
-        classPathsAndJars.extend(self.getGradleClassPathsFromFile())
-        classPathsAndJars.extend(self.getDynamicPaths())
+        classPathsAndJars = self.vim.eval("g:JavaComplete_LibsPath")
+        classPathsAndJars = classPathsAndJars.split(":")
         return classPathsAndJars
 
     def getAllSourcePaths(self):
@@ -44,12 +35,8 @@ class PathsFinder:
 
         return sourcePaths
 
-
-
-    def getGradleClassPathsFromFile(self):
+    def getGradleClassPathsFromFile(self, filename):
         list = []
-
-        filename = self.ProjectController.GRADLE_WRITE_FILE
 
         if os.path.isfile(filename):
             with open(filename, 'U') as f:
@@ -69,15 +56,18 @@ class PathsFinder:
         currentPlatformDir = 'android-' + self.getAndroidVersionFromBuildGradle()
 
         sdkSourcePath = androidHome +os.sep+ 'sources' +os.sep+ currentPlatformDir +os.sep
+
         return sdkSourcePath
 
 
     def getAndroidVersionFromBuildGradle(self):
-        with open(ProjectController.GRADLE_BUILD_FILE, 'U') as f:
-            for line in f:
-                result = self.getAndroidVersionFromLine(line)
-                if result != None:
-                    return result
+        buildFiles = self.ProjectController.findFile(os.getcwd(), ProjectController.GRADLE_BUILD_FILE)
+        for gradle in buildFiles:
+            with open(gradle, 'U') as f:
+                for line in f:
+                    result = self.getAndroidVersionFromLine(line)
+                    if result != None:
+                        return result
 
     def getAndroidVersionFromLine(self, line):
         matchObj = re.search(r'compileSdkVersion\W*(\d*)', line, re.M|re.I)
@@ -86,13 +76,6 @@ class PathsFinder:
             return version
         return None
 
-    def getExplodedAarClasses(self):
-        foundJars = []
-        for root, dirs, files in os.walk("./"):
-            for file in files:
-                if file.endswith(".jar"):
-                    foundJars.append(os.path.join(root, file))
-        return foundJars
 
     def getLatestApkFile(self):
         foundFiles = []

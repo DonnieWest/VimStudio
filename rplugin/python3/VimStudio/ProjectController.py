@@ -6,8 +6,6 @@ class ProjectController:
 
     ANDROID_MANIFEST_FILE = 'AndroidManifest.xml'
     GRADLE_BUILD_FILE = "build.gradle"
-    GRADLE_WRITE_FILE = ".output_paths_result"  #Also defined in gradle config
-    PATH_FILE = ".grand_source_paths"
 
     def fileExistsInCwd(self, filename, maxDepth):
         current_directory = os.getcwd()
@@ -52,9 +50,6 @@ class ProjectController:
 
     def isAndroidProject(self):
         return self.fileExistsInCwd(self.ANDROID_MANIFEST_FILE, 10)
-
-    def isVimStudioReady(self):
-        return self.fileExistsInCwd(self.GRADLE_WRITE_FILE, 1)
 
     def findAndroidManifest(self):
         cwd = os.getcwd()

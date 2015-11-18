@@ -2,6 +2,9 @@ import os
 from .PathsFinder import PathsFinder
 
 class Ctags:
+    def __init__(self, vim):
+        self.vim = vim
+
     tagsFile = ".tags"
     tempFile = ".TEMP_TAGS"
     ctagsCommandArray = []
@@ -35,7 +38,7 @@ class Ctags:
         self.ctagsCommandArray.extend(['-f', self.tempFile])
 
     def addTagsReadSources(self):
-        self.ctagsCommandArray.extend(PathsFinder().getAllSourcePaths())
+        self.ctagsCommandArray.extend(PathsFinder(self.vim).getAllSourcePaths())
 
     def addCommandSeperator(self):
         self.ctagsCommandArray.append('&&')

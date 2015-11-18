@@ -3,7 +3,6 @@ let current_compiler = 'gradle'
 
 " Links to understand error formats
 "   http://flukus.github.io/2015/07/03/2015_07_03-Vim-errorformat-Demystified/
-
 exec 'CompilerSet makeprg=' . g:gradleBin . '\ --console=plain\ '
 CompilerSet errorformat=\%-G%f:%l:\ %tarning:\ Element\ SubscribeHandler\ unvalidated\ %.%#,
                         \[ant:checkstyle\]\ %f:%l:%c:\ %m,
