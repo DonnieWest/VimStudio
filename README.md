@@ -3,19 +3,15 @@ VimStudio - an Gradle/Android Neovim plugin - batteries included
 
 This is a Vim Plugin for Android development based on the superb [Vim-Grand](https://github.com/meonlol/vim-grand) which is in turn based on [hsanson/vim-android](https://github.com/hsanson/vim-android).
 
-When Vim-Grand turned into a Ruby project, it broke the ability for it to be used with Neovim. This project is essentially a fork of the old python version of Vim-Grand turned into a remote plugin for Neovim. It also happens to work perfectly with generic Gradle projects.
-
 Requirements
 --------------------------------------------------------------------------------
 
 - Neovim w/ Python 3 installed
-- Android SDK installed with the $ANDROID_HOME environment variable set.
-- Gradle 2.0+ (?) or a gradle wrapper in the project.
 - [exuberant-ctags](http://ctags.sourceforge.net/) for the `VimStudioCtags` command.
 - [scrooloose/syntastic](https://github.com/scrooloose/syntastic) for syntax
   checking.
 - [artur-shaik/javacomplete2](https://github.com/artur-shaik/vim-javacomplete2) For code
-  completion.
+  completion and classpath gathering
 
 ### Recommended
 
@@ -50,12 +46,10 @@ Features
 
 ### Warning! VimStudio currently only works on Unix systems
 
-*:SetupVimStudio* Sets up all the project paths for javacomplete and syntastic.
-When used in combination with the `grand.gradle` script, all paths defined in
-your build.gradle will also be used for autocompletion and syntax checking.  
+*:SetupVimStudio* Sets up all the project paths for syntastic. Relies on the JavaComplete2 plugin
 
 *:VimStudioCtags* Generates a tags file in the background using exuberant-ctags.
-This way you can jump to classes (even Androids source files) simply by
+This way you can jump to classes (even Android source files) simply by
 pressing `CTRL-]`.
 
 *VimStudio sets gradle to be the compiler
