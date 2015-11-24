@@ -1,6 +1,7 @@
 import re
 import os
 import sys
+import glob
 from .ProjectController import ProjectController
 
 class PathsFinder:
@@ -15,11 +16,11 @@ class PathsFinder:
     def getStaticPaths(self):
         staticPaths = []
 
-        staticPaths.append('./src/main/java')
-        staticPaths.append('./build/intermediates/classes/debug')
+        staticPaths.extend(glob.glob(os.getcwd() + '/**/build/intermediates/classes/debug'))
         sources = self.vim.eval("g:JavaComplete_SourcesPath")[1:].replace("//", "/").split(":")
         for each in sources:
-            staticPaths.append(each + "/main/java")
+            if each.find("src"):
+                staticPaths.append(each + "/main/java")
         return staticPaths
 
     def getAllClassPaths(self):
