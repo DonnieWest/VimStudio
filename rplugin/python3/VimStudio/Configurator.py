@@ -8,6 +8,9 @@ class Configurator(object):
     def setupSyntastic(self):
         classpath = []
         classpath.extend(PathsFinder(self.vim).getAllClassPaths())
-        classpath.extend(PathsFinder(self.vim).getAllSourcePaths())
+        sources = PathsFinder(self.vim).getAllSourcePaths()
+
+        classpath.extend(sources)
         sourcepath = ':'.join(classpath)
         self.vim.command("let g:syntastic_java_javac_classpath = '" + sourcepath + "'")
+        self.vim.command("let g:neomake_java_javac_args = ['-cp', '''" + sourcepath + "''']")
