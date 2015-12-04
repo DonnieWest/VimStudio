@@ -21,7 +21,7 @@ class VimStudio(object):
     def setupVimStudio(self):
         if self.ProjectController.isGradleProject():
             self.Gradle.setGradleCompiler()
-        self.Configurator.setupSyntastic()
+            self.Configurator.setupCheckers()
     
     @neovim.command("VimStudioLint")
     def lint(self):

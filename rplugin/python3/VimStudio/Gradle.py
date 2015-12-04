@@ -8,7 +8,7 @@ class Gradle(object):
     
     def setGradleCompiler(self):
         self.vim.command("let g:gradleBin = '" + self.gradleCommand().replace(" ", "\ ") + "'")
-        self.vim.command("compiler! gradle")
+        # self.vim.command("compiler! gradleLinter")
 
     def runGradleCommand(self, command, async=False):
         gradle = self.gradleCommand()
