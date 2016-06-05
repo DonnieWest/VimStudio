@@ -71,7 +71,7 @@ class PathsFinder:
                         return result
 
     def getAndroidVersionFromLine(self, line):
-        matchObj = re.search(r'compileSdkVersion\W*(\d*)', line, re.M|re.I)
+        matchObj = re.search(r'compileSdkVersion\D*(\d*)', line, re.M|re.I)
         if matchObj != None:
             version = matchObj.group(1)
             return version
