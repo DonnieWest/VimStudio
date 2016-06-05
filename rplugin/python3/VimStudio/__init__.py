@@ -22,7 +22,7 @@ class VimStudio(object):
         if self.ProjectController.isGradleProject():
             self.Gradle.setGradleCompiler()
             self.Configurator.setupCheckers()
-    
+
     @neovim.command("VimStudioLint")
     def lint(self):
         self.Gradle.lint()
@@ -34,12 +34,6 @@ class VimStudio(object):
     @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
         self.setupVimStudio()
-
-    #TODO: Force refresh of classpaths when build.gradle is written
-    # @neovim.autocmd("BufWritePost", pattern="build.gradle")
-    # def refreshPaths(self):
-    #     self.Configurator.generatePaths()
-    #     self.setupVimStudio()
 
     @neovim.autocmd("BufEnter", pattern="*.xml")
     def layoutCompletion(self):

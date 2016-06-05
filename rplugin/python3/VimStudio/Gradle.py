@@ -5,10 +5,9 @@ class Gradle(object):
     def __init__(self, vim):
         self.vim = vim
         self.gradleInit = vim.eval("g:VimStudioDirectory") + "/init.gradle"
-    
+
     def setGradleCompiler(self):
         self.vim.command("let g:gradleBin = '" + self.gradleCommand().replace(" ", "\ ") + "'")
-        # self.vim.command("compiler! gradleLinter")
 
     def runGradleCommand(self, command, async=False):
         gradle = self.gradleCommand()
@@ -23,6 +22,6 @@ class Gradle(object):
             return "./gradlew -I " + self.gradleInit
         else:
             return "gradle -I " + self.gradleInit
-    
+
     def lint(self):
         self.vim.command("cexpr system('" + self.gradleCommand() + " lint')")
