@@ -1,15 +1,117 @@
-allprojects{
+allprojects{ project ->
 
-  afterEvaluate {
-        if (getPlugins().hasPlugin('android') ||
-            getPlugins().hasPlugin('android-library')) {
+  project.afterEvaluate {
+    def hasAndroid = project.getPlugins().hasPlugin('android') || project.getPlugins().hasPlugin('android-library')
+    def hasCheckstyle = project.getPlugins().hasPlugin('checkstyle')
+    def hasFindbugs   = project.getPlugins().hasPlugin('findbugs')
+    def hasPmd = project.getPlugins().hasPlugin('pmd')
 
-            configure(android.lintOptions) {
-              textReport true
-              textOutput "stderr"
-              abortOnError false
-            }
-        }
-
+    if(hasAndroid) {
+      // Ensure linter outputs XML report. We parse it after the build finishes.
+      configure(android.lintOptions) {
+        textReport false
+          xmlReport true
+          abortOnError true
+      }
     }
+
+    // Force findbugs, checkstyle and pmd reports to output xml and include
+    // readable messages.
+    tasks.withType(FindBugs) {
+      configure(reports.xml) {
+        enabled true
+          withMessages true
+      }
+    }
+
+    tasks.withType(Pmd) {
+      configure(reports.xml) {
+        enabled true
+      }
+    }
+
+    tasks.withType(Checkstyle) {
+      configure(reports.xml) {
+        enabled true
+      }
+    }
+  }
+
+  project.gradle.buildFinished { result ->
+
+    if( project.hasProperty('android') ) {
+      def filePath = project.android.lintOptions.xmlOutput
+      if( filePath == null ) {
+        filePath = file([project.projectDir, "build", "outputs", "lint-results.xml"].join(File.separator))
+      }
+      if( filePath.exists() ) {
+        def xml = (new XmlParser()).parse(filePath)
+          xml.issue.each { issue ->
+            issue.location.each { location ->
+              def explanation = issue.@explanation.split("(?<=\\G.{70})")
+                System.err.println "lint: ${issue.@severity} ${location.@file}:${location.@line}:${location.@column} ${issue.@message}"
+                for(line in explanation) {
+                  System.err.println "      ${line}"
+                }
+            }
+          }
+      }
+    }
+
+    if( result.getFailure() != null ) {
+
+      project.tasks.withType(Pmd) { task ->
+        def report = task.reports.getXml().getDestination()
+          if(report != null && report.exists()) {
+            def xml = (new XmlParser()).parse(report)
+              xml.file.each { file ->
+                file.violation.each { violation ->
+                  System.err.println "pmd: warning ${file.@name}:${violation.@beginline}:${violation.@begincolumn} ${violation.text().trim()}"
+                }
+              }
+            delete report
+          }
+      }
+
+      project.tasks.withType(Checkstyle) { task ->
+        def report = task.reports.getXml().getDestination()
+          if(report.exists()) {
+            def xml = (new XmlParser()).parse(report)
+              xml.file.each { file ->
+                file.error.each { error ->
+                  System.err.println "checkstyle: warning ${file.@name}:${error.@line}:${error.@column} ${error.@message}"
+                }
+              }
+            delete report
+          }
+      }
+
+      project.tasks.withType(FindBugs) { task ->
+        def report = task.reports.getXml().getDestination()
+          if(report.exists() && report.length() > 0) {
+            def xml = (new XmlParser()).parse(report)
+              xml.BugInstance.each { bug ->
+                def code = bug.@type
+                  def message = ""
+                  bug.ShortMessage.each { msg ->
+                    message += " " + msg.text()
+                  }
+                bug.SourceLine.each { line ->
+                  def lineNr = line.@start == null ? 0 : line.@start
+                    def columnNr = line.@startBytecode == null ? 0 : line.@startBytecode
+                    // For some reason findbugs reports include only relative paths.
+                    // Even worst it does not include the whole relative path!!. For
+                    // this reason we try to find the absolute path here based on the
+                    // source file collection. This may be slow if there are too many
+                    // findbugs errors.
+                    def absolutePath = task.source.filter { it.getAbsolutePath().endsWith("${line.@sourcepath}") }.getAsPath()
+                    System.err.println "findbugs: warning ${absolutePath}:${lineNr}:${columnNr} ${message}"
+                    System.err.println("    Details: http://findbugs.sourceforge.net/bugDescriptions.html#${code}")
+                }
+              }
+            delete report
+          }
+      }
+    }
+  }
 }

@@ -1,7 +1,30 @@
 let current_compiler = 'gradle'
 
-let f = tempname()
-call mkdir(fnamemodify(f,':h'),'p',0700)
-exec 'CompilerSet makeprg=javac\ -Xlint\ -d\ ' . shellescape(fnamemodify(f, ':h')) . '\ -cp\ ' . g:gradleClasspath
+let s:makeprg = [
+ \  g:gradleBin,
+ \  '--console-plain',
+ \  '-I',
+ \  g:VimStudioDirectory . '/init.gradle',
+ \ '--daemon'
+ \ ]
 
-CompilerSet errorformat =%E%f:%l:\ error:\ %m,%W%f:%l:\ warning:\ %m,%E%f:%l:\ %m,%Z%p^,%-G%.%#
+exec 'CompilerSet makeprg=' . join(s:makeprg, '\ ')
+
+CompilerSet errorformat=
+    \%+ATask\ %.%#\ not\ found\ %.%#.,
+    \%EExecution\ failed\ for\ task\ %m,
+    \findbugs:\ %tarning\ %f:%l:%c\ %m,
+    \pmd:\ %tarning\ %f:%l:%c\ %m,
+    \checkstyle:\ %tarning\ %f:%l:%c\ %m,
+    \lint:\ %tarning\ %f:%l:%c\ %m,
+    \%A>\ %f:%l:%c:\ %trror:\ %m,
+    \%A>\ %f:%l:%c:\ %tarning:\ %m,
+    \%A%f:%l:\ %trror:\ %m,
+    \%A%f:%l:\ %tarning:\ %m,
+    \%A%f:%l:\ %trror\ -\ %m,
+    \%A%f:%l:\ %tarning\ -\ %m,
+    \%E%f:%l\ :\ %m,
+    \%C>\ %m,
+    \%-G%p^,
+    \%+G\ \ %.%#,
+    \%-G%.%#
