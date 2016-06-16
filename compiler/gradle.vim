@@ -2,7 +2,7 @@ let current_compiler = 'gradle'
 
 let s:makeprg = [
  \  g:gradleBin,
- \  '--console-plain',
+ \  '--console=plain',
  \  '-I',
  \  g:VimStudioDirectory . '/init.gradle',
  \ '--daemon'
