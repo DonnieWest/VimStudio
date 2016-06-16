@@ -13,7 +13,7 @@ class Configurator(object):
         classpath.extend(sources)
         sourcepath = ':'.join(classpath)
         self.vim.command("let g:syntastic_java_javac_classpath = '" + sourcepath + "'")
-        self.vim.command("let g:neomake_java_javac_args = ['-cp', '''" + sourcepath + "''']")
+        self.vim.command("let g:neomake_java_javac_classpath = '" + sourcepath + "'")
         self.vim.command("let g:gradleClasspath = '" + sourcepath + "'")
         self.vim.command("compiler! gradle")
         self.vim.command("let g:neomake_java_javac_autoload_gradle_classpath = 1")
