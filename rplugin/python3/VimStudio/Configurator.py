@@ -6,6 +6,7 @@ class Configurator(object):
 
     def __init__(self, vim):
         self.vim = vim
+        self.ProjectController = ProjectController()
 
     def setupCheckers(self):
         classpath = []
@@ -25,3 +26,9 @@ class Configurator(object):
         classpath = self.vim.eval("g:JavaComplete_BaseDir") + "/javacomplete2/classpath/" + self.vim.eval("g:JavaComplete_ProjectKey")
         os.remove(classpath)
         self.vim.command("call javacomplete#classpath#classpath#BuildClassPath()")
+
+    def launchEmulator(self, emulator):
+        if emulator in self.ProjectController.retrieveListOfEmulators():
+            self.vim.command("silent !emulator @" + emulator + " &")
+        else:
+            self.vim.command("echo 'that emulator doesn't exist")

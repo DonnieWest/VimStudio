@@ -41,6 +41,14 @@ class VimStudio(object):
         self.Configurator.resetJavacomplete()
         self.setupVimStudio()
 
+    @neovim.function("EmulatorComplete", sync=True)
+    def EmulatorComplete(self, *args, **kwargs):
+        return self.ProjectController.retrieveListOfEmulators()
+
+    @neovim.command("VimStudioEmulator", complete='customlist,EmulatorComplete', nargs="1", sync=True)
+    def launchEmulator(self, args):
+        self.Configurator.launchEmulator(args[0])
+
     @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
         self.setupVimStudio()

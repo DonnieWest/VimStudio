@@ -20,6 +20,17 @@ class ProjectController:
         else:
             return False
 
+    def retrieveListOfEmulators(self):
+        emulators = []
+        emulatorDir = os.path.expanduser("~") + "/.android/avd"
+        if os.path.isdir(emulatorDir):
+            emulatorPaths = self.fileNamesRetrieve(emulatorDir, 1, "*.avd")
+            for emulator in emulatorPaths:
+                emulator = emulator.split("/")[-1]
+                emulator = emulator.split(".")[0]
+                emulators.append(emulator)
+        return emulators
+
     def fileNamesRetrieve(self, top, maxDepth, fnMask):
         someFiles = []
 
