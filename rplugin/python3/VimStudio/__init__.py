@@ -31,6 +31,11 @@ class VimStudio(object):
     def autoCtags(self):
         self.ctags()
 
+
+    @neovim.autocmd("BufWritePost", pattern="build.gradle")
+    def sync(self):
+        self.Configurator.resetJavacomplete()
+
     @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
         self.setupVimStudio()
