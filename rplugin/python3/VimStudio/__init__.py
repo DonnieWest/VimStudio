@@ -31,7 +31,7 @@ class VimStudio(object):
     def autoCtags(self):
         self.ctags()
 
-    @neovim.command("Gradle", range='', nargs='*')
+    @neovim.command("Gradle", complete='customlist,GradleComplete', range='', nargs='*')
     def runGradleCommand(self, args, range):
         command = " ".join(args)
         self.Gradle.runGradleCommand(command)
@@ -44,6 +44,15 @@ class VimStudio(object):
     @neovim.function("EmulatorComplete", sync=True)
     def EmulatorComplete(self, *args, **kwargs):
         return self.ProjectController.retrieveListOfEmulators()
+
+    @neovim.function("GradleComplete", sync=True)
+    def GradleComplete(self, *args, **kwargs):
+        tasks = []
+        tasks.extend(self.Gradle.getAllTasks())
+        filter = args[0][0]
+        if (filter):
+            tasks = [task for task in tasks if filter in task]
+        return tasks
 
     @neovim.command("VimStudioEmulator", complete='customlist,EmulatorComplete', nargs="1", sync=True)
     def launchEmulator(self, args):

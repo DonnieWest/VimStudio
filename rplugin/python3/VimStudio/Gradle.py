@@ -25,3 +25,8 @@ class Gradle(object):
 
     def lint(self):
         self.vim.command("make lint")
+
+    def getAllTasks(self):
+        taskCommand = self.gradleCommand() + " --console=plain --quiet tasks | grep ' - ' | awk '{print $1}' | tr '\n' ' '"
+        output = os.popen(taskCommand)
+        return sorted(output.read().split(" "))
