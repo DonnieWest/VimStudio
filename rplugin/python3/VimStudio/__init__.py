@@ -43,7 +43,7 @@ class VimStudio(object):
         device = ""
         if devices:
             if len(devices) > 1:
-                device = self.vim.funcs.input("Which device? ", devices[0], "customlist,DeviceComplete")
+                device = self.vim.funcs.input("Which device? ", "all", "customlist,DeviceComplete")
                 if device is "":
                     return
                 elif device is not "all":
