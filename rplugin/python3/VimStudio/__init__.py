@@ -31,6 +31,10 @@ class VimStudio(object):
     def autoCtags(self):
         self.ctags()
 
+    @neovim.command("Gradle", range='', nargs='*')
+    def runGradleCommand(self, args, range):
+        command = " ".join(args)
+        self.Gradle.runGradleCommand(command)
 
     @neovim.autocmd("BufWritePost", pattern="build.gradle")
     def sync(self):
