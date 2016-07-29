@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from ProjectController import ProjectController
+from .ProjectController import ProjectController
 
 class AndroidManifest:
 
