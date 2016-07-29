@@ -5,6 +5,7 @@ class Gradle(object):
     def __init__(self, vim):
         self.vim = vim
         self.gradleInit = vim.eval("g:VimStudioDirectory") + "/init.gradle"
+        self.tasks = []
 
     def setGradleCompiler(self):
         self.vim.command("let g:gradleBin = '" + self.gradleCommand().replace(" ", "\ ") + "'")
@@ -27,6 +28,8 @@ class Gradle(object):
         self.vim.command("make lint")
 
     def getAllTasks(self):
-        taskCommand = self.gradleCommand() + " --console=plain --quiet tasks | grep ' - ' | awk '{print $1}' | tr '\n' ' '"
-        output = os.popen(taskCommand)
-        return sorted(output.read().split(" "))
+        if not self.tasks:
+            taskCommand = self.gradleCommand() + " --console=plain --quiet tasks | grep ' - ' | awk '{print $1}' | tr '\n' ' '"
+            output = os.popen(taskCommand)
+            self.tasks = sorted(output.read().split(" "))
+        return self.tasks
