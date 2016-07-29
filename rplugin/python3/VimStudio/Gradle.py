@@ -27,9 +27,19 @@ class Gradle(object):
     def lint(self):
         self.vim.command("make lint")
 
+    def rebuildProject(self):
+        self.runGradleCommand("assembleDebug")
+
     def getAllTasks(self):
         if not self.tasks:
             taskCommand = self.gradleCommand() + " --console=plain --quiet tasks | grep ' - ' | awk '{print $1}' | tr '\n' ' '"
             output = os.popen(taskCommand)
             self.tasks = sorted(output.read().split(" "))
         return self.tasks
+
+    def getAllFlavors(self):
+        flavors = []
+        for task in self.getAllTasks():
+            if "assemble" in task:
+                flavors.append(task.replace("assemble", ""))
+        return flavors

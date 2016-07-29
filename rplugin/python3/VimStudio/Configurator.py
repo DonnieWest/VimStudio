@@ -1,16 +1,19 @@
+import os
 from .PathsFinder import PathsFinder
 from .ProjectController import ProjectController
-import os
+from .AndroidManifest import AndroidManifest
 
 class Configurator(object):
 
     def __init__(self, vim):
         self.vim = vim
         self.ProjectController = ProjectController()
+        self.PathsFinder = PathsFinder(vim)
+        self.AndroidManifest = AndroidManifest()
 
     def setupCheckers(self):
         classpath = []
-        classpath.extend(PathsFinder(self.vim).getAllClassPaths())
+        classpath.extend(self.PathsFinder.getAllClassPaths())
         sources = PathsFinder(self.vim).getAllSourcePaths()
 
         classpath.extend(sources)
@@ -32,3 +35,30 @@ class Configurator(object):
             self.vim.command("silent !emulator @" + emulator + " &")
         else:
             self.vim.command("echo 'that emulator doesn't exist")
+
+    def getDevices(self):
+        devices = []
+        output = os.popen("adb devices | grep device | grep -v devices | awk '{print $1}' | tr '\n' ' '")
+        devices.extend(output.read().split(" "))
+        return devices
+
+    def installOnDevice(self, deviceID):
+        apk = self.PathsFinder.getLatestApkFile()
+        self.vim.command("!adb -s " + deviceID + " install -r -d " + apk)
+
+    def installOnAllDevices(self, deviceIDs=[]):
+        if not deviceIDs:
+            deviceIDs.extend(self.getDevices)
+        for device in deviceIDs:
+            self.installOnDevice(device)
+
+    def launchMainActivity(self, deviceID):
+        package = self.AndroidManifest.getPackage()
+        command = "silent !adb -s " + deviceID + " shell monkey -p " + package + " -c android.intent.category.LAUNCHER 1 &"
+        self.vim.command(command)
+
+    def launchAllMainActivity(self, deviceIDs=[]):
+        if not deviceIDs:
+            deviceIDs.extend(self.getDevices)
+        for device in deviceIDs:
+            self.launchMainActivity(device)

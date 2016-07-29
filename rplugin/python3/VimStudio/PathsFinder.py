@@ -80,7 +80,7 @@ class PathsFinder:
 
     def getLatestApkFile(self):
         foundFiles = []
-        for root, dirs, files in os.walk("./build/"):
+        for root, dirs, files in os.walk(os.getcwd()):
             for file in files:
                 if file.endswith(".apk"):
                     foundFiles.append(os.path.join(root, file))
