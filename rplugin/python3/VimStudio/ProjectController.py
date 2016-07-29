@@ -56,11 +56,22 @@ class ProjectController:
             for filename in fnmatch.filter(filenames, name):
                 matches.append(os.path.join(root, filename))
         return matches
+
+    def findDir(self, directory, name):
+        matches = []
+        for root, dirnames, filenames in os.walk(directory):
+            for dirname in fnmatch.filter(dirnames, name):
+                matches.append(os.path.join(root, dirname))
+        return matches
+
     def isGradleProject(self):
         return self.fileExistsInCwd(self.GRADLE_BUILD_FILE, 1)
 
     def isAndroidProject(self):
         return self.fileExistsInCwd(self.ANDROID_MANIFEST_FILE, 10)
+
+    def isBuilt(self):
+        return bool(self.findDir(os.getcwd(), "build"))
 
     def findAndroidManifest(self):
         cwd = os.getcwd()

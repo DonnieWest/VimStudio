@@ -18,6 +18,11 @@ class VimStudio(object):
         if self.ProjectController.isGradleProject():
             self.Gradle.setGradleCompiler()
             self.Configurator.setupCheckers()
+            if not self.ProjectController.isBuilt() and self.ProjectController.isAndroidProject():
+                self.Gradle.runGradleCommand("assembleDebug")
+                self.Configurator.resetJavacomplete()
+
+
 
     @neovim.command("Gradle", complete='customlist,GradleComplete', range='', nargs='*')
     def runGradleCommand(self, args, range):
