@@ -39,6 +39,7 @@ class VimStudio(object):
     @neovim.autocmd("BufWritePost", pattern="build.gradle")
     def sync(self):
         self.Configurator.resetJavacomplete()
+        self.setupVimStudio()
 
     @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
