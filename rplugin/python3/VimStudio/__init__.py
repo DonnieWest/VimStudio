@@ -98,7 +98,7 @@ class VimStudio(object):
 
     @neovim.function("EmulatorComplete", sync=True)
     def EmulatorComplete(self, *args, **kwargs):
-        return []
+        return self.ProjectController.retrieveListOfEmulators()
 
     @neovim.function("GradleComplete", sync=True)
     def GradleComplete(self, *args, **kwargs):
