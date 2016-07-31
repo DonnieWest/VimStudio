@@ -22,7 +22,10 @@ class VimStudio(object):
                 self.Gradle.runGradleCommand("assembleDebug")
                 self.Configurator.resetJavacomplete()
 
-
+    @neovim.command("ADB", range='', nargs='*')
+    def runADBCommand(self, args, range):
+        command = " ".join(args)
+        self.vim.command("!adb " + command)
 
     @neovim.command("Gradle", complete='customlist,GradleComplete', range='', nargs='*')
     def runGradleCommand(self, args, range):
