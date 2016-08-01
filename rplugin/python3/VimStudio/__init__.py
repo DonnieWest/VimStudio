@@ -47,19 +47,19 @@ class VimStudio(object):
         if devices:
             if len(devices) > 1:
                 device = self.vim.funcs.input("Which device? ", "all", "customlist,DeviceComplete")
-                if device is "":
-                    return
-                elif device is not "all":
+                if device is not "all":
                     self.Gradle.runGradleCommand("assemble" + flavor)
                     self.Configurator.installOnDevice(device)
                     self.Configurator.launchMainActivity(device)
                 else:
                     self.Gradle.runGradleCommand("install" + flavor)
                     self.Configurator.launchAllMainActivity()
-            else:
+            elif len(devices) == 1:
                 device = devices[0]
                 self.Gradle.runGradleCommand("install" + flavor)
                 self.Configurator.launchMainActivity(device)
+            else:
+                self.vim.command("echo 'no devices available'")
         else:
             self.vim.command("echo 'no devices available'")
 
