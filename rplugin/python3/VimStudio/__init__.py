@@ -19,7 +19,7 @@ class VimStudio(object):
             self.Gradle.setGradleCompiler()
             self.Configurator.setupCheckers()
             if not self.ProjectController.isBuilt() and self.ProjectController.isAndroidProject():
-                self.Gradle.runGradleCommand("assembleDebug")
+                self.Gradle.runGradleCommand("compileDebugSources")
                 self.Configurator.resetJavacomplete()
 
     @neovim.command("ADB", range='', nargs='*')
