@@ -43,7 +43,6 @@ class VimStudio(object):
         if args:
             flavor = args[0]
         devices = self.Configurator.getDevices()
-        device = ""
         if devices:
             if len(devices) > 1:
                 device = self.vim.funcs.input("Which device? ", "all", "customlist,DeviceComplete")
@@ -54,7 +53,7 @@ class VimStudio(object):
                 else:
                     self.Gradle.runGradleCommand("install" + flavor)
                     self.Configurator.launchAllMainActivity()
-            elif len(devices) == 1:
+            elif len(devices) == 1 and devices[0] is not '':
                 device = devices[0]
                 self.Gradle.runGradleCommand("install" + flavor)
                 self.Configurator.launchMainActivity(device)
