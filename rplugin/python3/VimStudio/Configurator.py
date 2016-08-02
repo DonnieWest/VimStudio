@@ -44,7 +44,7 @@ class Configurator(object):
 
     def installOnDevice(self, deviceID):
         apk = self.PathsFinder.getLatestApkFile()
-        self.vim.command("!adb -s " + deviceID + " install -r -d " + apk)
+        self.vim.command("silent !adb -s " + deviceID + " install -r -d " + apk)
 
     def installOnAllDevices(self, deviceIDs=[]):
         if not deviceIDs:
