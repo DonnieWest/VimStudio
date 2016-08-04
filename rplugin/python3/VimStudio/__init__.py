@@ -45,14 +45,10 @@ class VimStudio(object):
         devices = self.Configurator.getDevices()
         if devices:
             if len(devices) > 1:
-                device = self.vim.funcs.input("Which device? ", "all", "customlist,DeviceComplete")
-                if device is not "all":
-                    self.Gradle.runGradleCommand("assemble" + flavor)
-                    self.Configurator.installOnDevice(device)
-                    self.Configurator.launchMainActivity(device)
-                else:
-                    self.Gradle.runGradleCommand("install" + flavor)
-                    self.Configurator.launchAllMainActivity()
+                device = self.vim.funcs.input("Which device? ", devices[0], "customlist,DeviceComplete")
+                self.Gradle.runGradleCommand("assemble" + flavor)
+                self.Configurator.installOnDevice(device)
+                self.Configurator.launchMainActivity(device)
             elif len(devices) == 1:
                 device = devices[0]
                 self.Gradle.runGradleCommand("install" + flavor)
@@ -124,6 +120,4 @@ class VimStudio(object):
     def DeviceComplete(self, *args, **kwargs):
         devices = []
         devices.extend(self.Configurator.getDevices())
-        if devices and len(devices) > 1:
-            devices.append("all")
         return devices
