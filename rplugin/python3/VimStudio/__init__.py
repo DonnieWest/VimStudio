@@ -53,7 +53,7 @@ class VimStudio(object):
                 else:
                     self.Gradle.runGradleCommand("install" + flavor)
                     self.Configurator.launchAllMainActivity()
-            elif len(devices) == 1 and devices[0] is not '':
+            elif len(devices) == 1:
                 device = devices[0]
                 self.Gradle.runGradleCommand("install" + flavor)
                 self.Configurator.launchMainActivity(device)

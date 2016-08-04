@@ -29,7 +29,9 @@ class Configurator(object):
     def getDevices(self):
         devices = []
         output = os.popen("adb devices | grep device | grep -v devices | awk '{print $1}' | tr '\n' ' '")
-        devices.extend(output.read().split(" "))
+        for device in output.read().split(" "):
+            if device is not '':
+                devices.append(device)
         return devices
 
     def installOnDevice(self, deviceID):
