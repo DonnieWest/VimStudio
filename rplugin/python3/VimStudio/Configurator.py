@@ -12,17 +12,7 @@ class Configurator(object):
         self.AndroidManifest = AndroidManifest()
 
     def setupCheckers(self):
-        classpath = []
-        classpath.extend(self.PathsFinder.getAllClassPaths())
-        sources = PathsFinder(self.vim).getAllSourcePaths()
-
-        classpath.extend(sources)
-        sourcepath = ':'.join(classpath)
-        self.vim.command("let g:syntastic_java_javac_classpath = '" + sourcepath + "'")
-        self.vim.command("let g:neomake_java_javac_classpath = '" + sourcepath + "'")
-        self.vim.command("let g:gradleClasspath = '" + sourcepath + "'")
         self.vim.command("compiler! gradle")
-        self.vim.command("let g:neomake_java_javac_autoload_gradle_classpath = 1")
 
     def resetJavacomplete(self):
         self.vim.command("JCcacheClear")

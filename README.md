@@ -8,15 +8,10 @@ Requirements
 
 - Neovim w/ Python 3 installed
 - [exuberant-ctags](http://ctags.sourceforge.net/) for the `VimStudioCtags` command.
-- [scrooloose/syntastic](https://github.com/scrooloose/syntastic) for syntax
+- [Neomake](https://github.com/neomake/neomake) for syntax
   checking.
 - [artur-shaik/javacomplete2](https://github.com/artur-shaik/vim-javacomplete2) For code
   completion and classpath gathering
-
-### Recommended
-
-- [YouCompleteMe](https://github.com/Valloric/YouCompleteMe) for managing
-  additional autocompletion features.
 
 
 Installation
@@ -25,19 +20,11 @@ Installation
 If you don't use one already, install a package manager plugin like Pathogen
 or Vundle. It makes installing as simple as:
 
-_Vundle:_
+_vim-plug:_
 
-1. Add the line `Plugin 'DonnieWest/VimStudio'` to your .vimrc
+1. Add the line `Plug 'DonnieWest/VimStudio'` to your .vimrc
 2. Call `:so %` on the updated .vimrc to reload it.
-3. Run `:PluginInstall` to let vundle install it for you.
-
-_Pathogen:_
-
-Copy and past into the terminal:
-
-    cd ~/.vim/bundle
-    git clone git://github.com/tpope/vim-fugitive.git
-    vim -u NONE -c "helptags vim-fugitive/doc" -c q
+3. Run `:PlugInstall` to let vundle install it for you.
 
 
 
@@ -46,7 +33,15 @@ Features
 
 ### Warning! VimStudio currently only works on Unix systems
 
-*:SetupVimStudio* Sets up all the project paths for syntastic. Relies on the JavaComplete2 plugin
+*:SetupVimStudio* Sets the compiler to be Gradle and builds the project. Relies on the JavaComplete2 plugin
+
+*:Gradle* is a wrapper around the gradle command line interface
+
+*:ADB* is a wrapper around the adb command line interface
+
+*:VimStudioEmulator* autocompletes and launches emulators available on your system
+
+*:VimStudioInstall* installs the apk on a device of your choice
 
 *:VimStudioCtags* Generates a tags file in the background using exuberant-ctags.
 This way you can jump to classes (even Android source files) simply by
