@@ -17,7 +17,8 @@ class Configurator(object):
     def resetJavacomplete(self):
         self.vim.command("JCcacheClear")
         classpath = self.vim.eval("g:JavaComplete_BaseDir") + "/javacomplete2/classpath/" + self.vim.eval("g:JavaComplete_ProjectKey")
-        os.remove(classpath)
+        if os.path.isfile(classpath):
+            os.remove(classpath)
         self.vim.command("call javacomplete#classpath#classpath#BuildClassPath()")
 
     def launchEmulator(self, emulator):
