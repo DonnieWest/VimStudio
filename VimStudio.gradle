@@ -10,7 +10,7 @@ allprojects{ project ->
       configure(android.lintOptions) {
         textReport false
         xmlReport true
-        abortOnError true
+        abortOnError false
       }
     }
 
