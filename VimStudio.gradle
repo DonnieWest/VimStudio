@@ -41,7 +41,7 @@ allprojects{ project ->
     if( project.hasProperty('android') ) {
       def filePath = project.android.lintOptions.xmlOutput
       if( filePath == null ) {
-        filePath = file([project.projectDir, "build", "outputs", "lint-results.xml"].join(File.separator))
+        filePath = file([project.projectDir, "build", "outputs", "lint-results-debug.xml"].join(File.separator))
       }
       if( filePath.exists() ) {
         def xml = (new XmlParser()).parse(filePath)
