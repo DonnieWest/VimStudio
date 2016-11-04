@@ -1,4 +1,6 @@
 import neovim
+import subprocess
+import os
 from .Configurator import Configurator
 from .Ctags import Ctags
 from .ProjectController import ProjectController
@@ -25,7 +27,18 @@ class VimStudio(object):
     @neovim.command("ADB", range='', nargs='*')
     def runADBCommand(self, args, range):
         command = " ".join(args)
-        self.vim.command("!adb " + command)
+        adb = subprocess.Popen(
+            "adb " + command,
+            env=os.environ.copy(),
+            cwd=os.getcwd(),
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            bufsize=1
+        )
+        for line in adb.stdout.readlines():
+            self.vim.command("echom '" + line.strip().decode('utf-8') + "'")
 
     @neovim.command("Gradle", complete='customlist,GradleComplete', range='', nargs='*')
     def runGradleCommand(self, args, range):
