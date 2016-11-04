@@ -48,7 +48,7 @@ class VimStudio(object):
             if "install" in command:
                 self.Configurator.launchAllMainActivity()
         else:
-            self.vim.command("echo 'this is not a gradle project'")
+            self.vim.command("echom 'this is not a gradle project'")
 
     @neovim.command("VimStudioInstall", complete='customlist,FlavorComplete', nargs="?", sync=True)
     def install(self, args):
@@ -67,9 +67,9 @@ class VimStudio(object):
                 self.Gradle.runGradleCommand("install" + flavor)
                 self.Configurator.launchMainActivity(device)
             else:
-                self.vim.command("echo 'no devices available'")
+                self.vim.command("echom 'no devices available'")
         else:
-            self.vim.command("echo 'no devices available'")
+            self.vim.command("echom 'no devices available'")
 
 
     @neovim.command("VimStudioCtags")
