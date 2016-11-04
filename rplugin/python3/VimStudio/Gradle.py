@@ -1,4 +1,6 @@
 import os
+import subprocess
+import shutil
 
 class Gradle(object):
 
@@ -8,21 +10,41 @@ class Gradle(object):
         self.tasks = []
 
     def setGradleCompiler(self):
-        self.vim.command("let g:gradleBin = '" + self.gradleCommand().replace(" ", "\ ") + "'")
-
-    def runGradleCommand(self, command, async=False):
         gradle = self.gradleCommand()
-        if async == True:
-            gradle = "Dispatch! " + gradle
+        if gradle is not None:
+            self.vim.command("let g:gradleBin = '" + self.gradleCommand().replace(" ", "\ ") + "'")
         else:
-            gradle = "!" + gradle
-        self.vim.command("%s %s" % (gradle, command))
+            self.vim.command("echom 'No gradle wrapper found or gradle binary in Path'")
+
+    def runGradleCommand(self, command):
+        gradle = self.gradleCommand()
+        if gradle is None:
+            self.vim.command("echom 'No gradle wrapper found or gradle binary in Path'")
+        else:
+            gradleCommand = subprocess.Popen(
+                gradle + " " + command,
+                env=os.environ.copy(),
+                cwd=os.getcwd(),
+                stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                bufsize=1
+            )
+            gradleCommand.wait()
+            if gradleCommand.returncode is 0:
+                self.vim.command("echom 'Gradle command " + command + " succeeded'")
+            else:
+                self.vim.command("echom 'Gradle " + command + " failed'")
+            return gradleCommand.returncode
 
     def gradleCommand(self):
         if os.path.isfile("./gradlew") and os.access("./gradlew", os.X_OK):
             return "./gradlew -I " + self.gradleInit
-        else:
+        elif shutil.which('gradle') is not None:
             return "gradle -I " + self.gradleInit
+        else:
+            return None
 
     def lint(self):
         self.vim.command("make lint")
@@ -41,5 +63,8 @@ class Gradle(object):
         flavors = []
         for task in self.getAllTasks():
             if "assemble" in task:
-                flavors.append(task.replace("assemble", ""))
+                if task is "assemble":
+                    flavors.append(task)
+                else:
+                    flavors.append(task.replace("assemble", ""))
         return flavors

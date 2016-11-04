@@ -41,7 +41,6 @@ class ProjectController:
 
             someFiles.extend([f for f in allFiles if fnmatch.fnmatch(os.path.basename(f), fnMask )])
 
-        
         for d in range(1, maxDepth+1):
             maxGlob = ".*".join("/" * (d + 1))[1:-1]
             topGlob = os.path.join(top, maxGlob)

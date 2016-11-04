@@ -1,4 +1,5 @@
 import os
+import subprocess
 from .PathsFinder import PathsFinder
 from .ProjectController import ProjectController
 from .AndroidManifest import AndroidManifest
@@ -19,9 +20,18 @@ class Configurator(object):
 
     def launchEmulator(self, emulator):
         if emulator in self.ProjectController.retrieveListOfEmulators():
-            self.vim.command("silent !emulator @" + emulator + " &")
+            emulate = subprocess.Popen(
+                "emulator @" + emulator,
+                env=os.environ.copy(),
+                cwd=os.getcwd(),
+                stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                bufsize=1
+            )
         else:
-            self.vim.command("echo 'that emulator doesn't exist")
+            self.vim.command("echom 'that emulator doesn't exist")
 
     def getDevices(self):
         devices = []
@@ -33,7 +43,22 @@ class Configurator(object):
 
     def installOnDevice(self, deviceID):
         apk = self.PathsFinder.getLatestApkFile()
-        self.vim.command("silent !adb -s " + deviceID + " install -r -d " + apk)
+        installation = subprocess.Popen(
+            "adb -s " + deviceID + " install -r -d " + apk,
+            env=os.environ.copy(),
+            cwd=os.getcwd(),
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            bufsize=1
+        )
+        installation.wait()
+        if installation.returncode is 0:
+            self.vim.command("echom 'Installation succeeded'")
+        else:
+            self.vim.command("echom 'Installation failed'")
+        return installation.returncode
 
     def installOnAllDevices(self, deviceIDs=[]):
         if not deviceIDs:
@@ -43,8 +68,23 @@ class Configurator(object):
 
     def launchMainActivity(self, deviceID):
         package = self.AndroidManifest.getPackage()
-        command = "silent !adb -s " + deviceID + " shell monkey -p " + package + " -c android.intent.category.LAUNCHER 1 &"
-        self.vim.command(command)
+        command = "adb -s " + deviceID + " shell monkey -p " + package + " -c android.intent.category.LAUNCHER 1 &"
+        launchActivity = subprocess.Popen(
+            command,
+            env=os.environ.copy(),
+            cwd=os.getcwd(),
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            bufsize=1
+        )
+        launchActivity.wait()
+        if launchActivity.returncode is 0:
+            self.vim.command("echom 'launch MainActivity succeeded'")
+        else:
+            self.vim.command("echom 'launch MainActivity failed'")
+        return launchActivity.returncode
 
     def launchAllMainActivity(self, deviceIDs=[]):
         if not deviceIDs:
