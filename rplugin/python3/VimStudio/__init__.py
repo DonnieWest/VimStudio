@@ -50,7 +50,7 @@ class VimStudio(object):
         else:
             self.vim.command("echom 'this is not a gradle project'")
 
-    @neovim.command("VimStudioInstall", complete='customlist,FlavorComplete', nargs="?", sync=True)
+    @neovim.command("VimStudioInstall", complete='customlist,FlavorComplete', nargs="?")
     def install(self, args):
         flavor = "Debug"
         if args:
@@ -82,7 +82,7 @@ class VimStudio(object):
     def lint(self):
         self.Gradle.lint()
 
-    @neovim.command("VimStudioEmulator", complete='customlist,EmulatorComplete', nargs="1", sync=True)
+    @neovim.command("VimStudioEmulator", complete='customlist,EmulatorComplete', nargs="1")
     def launchEmulator(self, args):
         self.Configurator.launchEmulator(args[0])
 
