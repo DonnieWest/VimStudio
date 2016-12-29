@@ -75,4 +75,6 @@ class ProjectController:
     def findAndroidManifest(self):
         cwd = os.getcwd()
         manifest = self.ANDROID_MANIFEST_FILE
-        return self.findFile(cwd, manifest).pop()
+        arrayOfManifests = self.findFile(cwd, manifest)
+        if arrayOfManifests:
+            return arrayOfManifests.pop()
