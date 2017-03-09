@@ -86,14 +86,6 @@ class VimStudio(object):
     def launchEmulator(self, args):
         self.Configurator.launchEmulator(args[0])
 
-    @neovim.command("VimStudioEmulatorManager")
-    def launchEmulatorManager(self):
-        self.Configurator.launchEmulatorManager()
-
-    @neovim.command("VimStudioSDKManager")
-    def launchEmulatorManager(self):
-        self.Configurator.launchSDKManager()
-
     @neovim.autocmd("BufReadPost", pattern="*.java")
     def setup(self):
         self.setupVimStudio()

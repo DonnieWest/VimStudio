@@ -91,27 +91,3 @@ class Configurator(object):
             deviceIDs.extend(self.getDevices)
         for device in deviceIDs:
             self.launchMainActivity(device)
-
-    def launchSDKManager(self):
-        subprocess.Popen(
-            "android",
-            env=os.environ.copy(),
-            cwd=os.getcwd(),
-            stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            bufsize=1
-        )
-
-    def launchEmulatorManager(self):
-        subprocess.Popen(
-            "android avd",
-            env=os.environ.copy(),
-            cwd=os.getcwd(),
-            stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            bufsize=1
-        )
