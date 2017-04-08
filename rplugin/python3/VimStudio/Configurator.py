@@ -16,7 +16,10 @@ class Configurator(object):
         self.vim.command("compiler! gradle")
 
     def resetJavacomplete(self):
-        self.vim.command("JCclasspathGenerate")
+        try:
+            self.vim.command("JCclasspathGenerate")
+        except:
+            print("Eat the error")
 
     def launchEmulator(self, emulator):
         if emulator in self.ProjectController.retrieveListOfEmulators():
