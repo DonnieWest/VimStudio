@@ -6,7 +6,6 @@ class Gradle(object):
 
     def __init__(self, vim):
         self.vim = vim
-        self.gradleInit = vim.eval("g:VimStudioDirectory") + "/init.gradle"
         self.tasks = []
 
     def setGradleCompiler(self):
@@ -39,10 +38,11 @@ class Gradle(object):
             return gradleCommand.returncode
 
     def gradleCommand(self):
+        gradleInit = self.vim.eval("g:VimStudioDirectory") + "/init.gradle"
         if os.path.isfile("./gradlew") and os.access("./gradlew", os.X_OK):
-            return "./gradlew -I " + self.gradleInit
+            return "./gradlew -I " + gradleInit
         elif shutil.which('gradle') is not None:
-            return "gradle -I " + self.gradleInit
+            return "gradle -I " + gradleInit
         else:
             return None
 
