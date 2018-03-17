@@ -27,7 +27,7 @@ class ProjectController:
             emulatorPaths = self.fileNamesRetrieve(emulatorDir, 1, "*.avd")
             for emulator in emulatorPaths:
                 emulator = emulator.split("/")[-1]
-                emulator = emulator.split(".")[0]
+                emulator = emulator[:-4]
                 emulators.append(emulator)
         return emulators
 
