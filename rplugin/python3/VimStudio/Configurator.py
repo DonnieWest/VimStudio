@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 from .PathsFinder import PathsFinder
 from .ProjectController import ProjectController
@@ -36,6 +37,27 @@ class Configurator(object):
         else:
             self.vim.command("echom 'that emulator doesn't exist")
 
+    def getApplicationDebuggingPort(self):
+        package = self.AndroidManifest.getPackage()
+        output = os.popen("adb shell ps | grep " + package + " | awk '{print $2}' | tr '\n' ' '")
+        return output.read()
+
+    def attachDebugger(self):
+        time.sleep(2)
+        port = self.getApplicationDebuggingPort()
+        adb = subprocess.Popen(
+                "adb forward tcp:9000 jdwp:" + port,
+            env=os.environ.copy(),
+            cwd=os.getcwd(),
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            bufsize=1
+        )
+        adb.wait()
+        self.vim.command("call vebugger#jdb#attach('localhost:9000')")
+
     def getDevices(self):
         devices = []
         output = os.popen("adb devices | grep device | grep -v devices | awk '{print $1}' | tr '\n' ' '")
@@ -69,9 +91,12 @@ class Configurator(object):
         for device in deviceIDs:
             self.installOnDevice(device)
 
-    def launchMainActivity(self, deviceID):
+    def launchMainActivity(self, deviceID, debugMode = False):
         package = self.AndroidManifest.getPackage()
-        command = "adb -s " + deviceID + " shell monkey -p " + package + " -c android.intent.category.LAUNCHER 1 &"
+        mainActivity = self.AndroidManifest.getMainActivity()
+        command = "adb -d shell am start -D -n '" + package  + "/" + mainActivity + "' &"
+        if debugMode:
+            command = command[:-1] + "-D &"
         launchActivity = subprocess.Popen(
             command,
             env=os.environ.copy(),

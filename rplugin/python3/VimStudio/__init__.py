@@ -73,6 +73,31 @@ class VimStudio(object):
         else:
             self.vim.command("echom 'no devices available'")
 
+    @neovim.command("VimStudioAttachDebugger", complete='customlist,FlavorComplete', nargs="?")
+    def debug(self, args):
+        flavor = "Debug"
+        if args:
+            flavor = args[0]
+        devices = self.Configurator.getDevices()
+        if devices:
+            if len(devices) > 1:
+                device = self.vim.funcs.input("Which device? ", devices[0], "customlist,DeviceComplete")
+                if self.Gradle.runGradleCommand("assemble" + flavor) is 0:
+                    if self.Configurator.installOnDevice(device) is 0:
+                        if self.Configurator.launchMainActivity(device, True) is 0:
+                            self.Configurator.attachDebugger()
+                            self.vim.command("echom 'Attached to debugger'")
+            elif len(devices) == 1:
+                device = devices[0]
+                if self.Gradle.runGradleCommand("install" + flavor) is 0:
+                    if self.Configurator.launchMainActivity(device, True) is 0:
+                        self.Configurator.attachDebugger()
+                        self.vim.command("echom 'Attached to debugger'")
+            else:
+                self.vim.command("echom 'no devices available'")
+        else:
+            self.vim.command("echom 'no devices available'")
+
 
     @neovim.command("VimStudioCtags")
     def ctags(self):
