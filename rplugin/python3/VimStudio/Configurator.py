@@ -94,7 +94,7 @@ class Configurator(object):
     def launchMainActivity(self, deviceID, debugMode = False):
         package = self.AndroidManifest.getPackage()
         mainActivity = self.AndroidManifest.getMainActivity()
-        command = "adb -d shell am start -D -n '" + package  + "/" + mainActivity + "' &"
+        command = "adb shell am start -n \"" + package  + "/" + mainActivity + "\" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER"
         if debugMode:
             command = command[:-1] + "-D &"
         launchActivity = subprocess.Popen(
