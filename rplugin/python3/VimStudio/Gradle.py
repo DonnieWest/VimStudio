@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 import shutil
 
@@ -25,11 +26,19 @@ class Gradle(object):
                 env=os.environ.copy(),
                 cwd=os.getcwd(),
                 stdout=subprocess.PIPE,
-                stdin=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
                 shell=True,
                 bufsize=1
             )
+
+            while True:
+                inline = gradleCommand.stdout.readline()
+                if not inline:
+                    break
+                try:
+                    self.vim.command("echom '" + inline.decode("utf-8")+ "'")
+                except:
+                    self.vim.command("echom ''")
+
             gradleCommand.wait()
             if gradleCommand.returncode is 0:
                 self.vim.command("echom 'Gradle command " + command + " succeeded'")
